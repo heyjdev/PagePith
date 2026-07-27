@@ -8,7 +8,10 @@
     "clean": "node scripts/clean.js",
     "build": "node scripts/build.js",
     "test": "node --test",
-    "check": "npm test && npm run build"
+    "test:snyk:dependencies": "snyk test --all-projects --severity-threshold=high",
+    "test:snyk:code": "snyk code test --severity-threshold=high",
+    "test:snyk": "npm run test:snyk:dependencies && npm run test:snyk:code",
+    "check": "npm test && npm run build && npm run test:snyk"
   },
   "engines": {
     "node": ">=20"
@@ -20,7 +23,8 @@
   },
   "devDependencies": {
     "esbuild": "0.25.6",
-    "jsdom": "29.1.1"
+    "jsdom": "29.1.1",
+    "snyk": "1.1306.1"
   },
   "license": "MIT"
 }

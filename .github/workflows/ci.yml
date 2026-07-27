@@ -49,3 +49,27 @@ jobs:
 
       - name: Audit production dependencies
         run: npm audit --omit=dev
+
+  snyk:
+    name: Snyk security scans
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Scan dependencies and source code with Snyk
+        run: npm run test:snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
